@@ -1,10 +1,8 @@
-var DummyTasks=[
-  {title:"task one", start: new Date("2018-01-01T01:00:00"), end: new Date("2018-12-31T23:59:00"), reoccuring:"never", priority:3, estTime:10, participatingUsers:[]},
-  {title:"task two", start:new Date("2018-01-01T01:00:00"), end: new Date("2018-01-01T09:00:00"), reoccuring:"never", priority:1, estTime:10, participatingUsers:[]},
-  {title:"task three", start: new Date("2018-01-01T01:00:00"), end: new Date("2018-01-01T09:00:00"), reoccuring:"never", priority:3, estTime:10, participatingUsers:[]}
-]
+var Tasks=[];
 
-
+window.onload= function(){
+    getTasks();
+}
 
 $(document).ready(function(){
   $("#createTask").click(function(){
@@ -16,7 +14,7 @@ $(document).ready(function(){
       }
       else{
           var task = {title:$("#taskTitle").val(),start:$("#start").val(), end:$("#end").val(), reoccuring:$("#reoccuring").val(), 
-                    numOfReoccurances:$("#numOfReoccurances").val()};
+                    numOfReoccurances:$("#numOfReoccurances").val(), priority:$("priority").val(), estTime:$("estTime").val()};
           var jobj = JSON.stringify(task);
           $("#json").text(jobj);
           console.log(jobj);
@@ -28,12 +26,20 @@ $(document).ready(function(){
               data: jobj,
               contentType: "application/json; charset=utf-8",
               success: function(data,textStatus) {
-                  createListHTML(DummyTasks)
+                  getTasks();
               }
             })
       }
     });
 });
+
+function getTasks(){
+    console.log("in get tasks");
+    $.getJSON('task', function(data) {
+      Tasks = data;
+      createListHTML(data);
+    })
+}
 
 function validateForm() {
     console.log("in validate form");
@@ -47,15 +53,34 @@ function validateForm() {
 }
 
 function createListHTML(list){
-                 var taskListHTML = "<ol>";
-               for( var i in list)
-               {
-                 let t = list[i];
-                 var timeRemaining = (t.end- t.start) / (1000*60*60);
-                 taskListHTML += "<li> "+t.title+" - Due in: "+ timeRemaining+" hrs </li>";                
-               }
-               taskListHTML+="</ol>"
-                $("#taskList").html(taskListHTML);
+    var taskListHTML = "<ol>";
+       for( var i in list)
+       {
+         let t = list[i];
+         let currentTime = new Date();
+         let e = new Date(t.end);
+         //get hours left up to one decimal
+         var timeRemaining = Math.round(((e-currentTime) / (1000*60*60))*10)/10;
+         taskListHTML += "<li> "+t.title+" <br> Due in: "+ timeRemaining+" hrs </li> <br>";                
+       }
+       taskListHTML+="</ol>"
+        $("#taskList").html(taskListHTML);
+}
+
+function sortOnPriority(){
+    console.log("sort on priority");
+    Tasks.sort(function(a,b){
+        let aTimeRem = ((new Date(a.end))- (new Date()));
+        console.log(a);
+        console.log("a time rem. = "+ aTimeRem);
+        let aScore = aTimeRem *a.priority;
+        console.log("a score = " + aScore);
+        let bTimeRem = ((new Date(b.end))- (new Date()));
+        let bScore = bTimeRem *b.priority;
+        console.log(aScore -bScore);
+        return aScore-bScore;
+    });
+    createListHTML(Tasks);
 }
 
 function displayReoccuringMenu(){

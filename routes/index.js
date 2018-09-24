@@ -15,7 +15,7 @@ var taskSchema = mongoose.Schema({
 title: String,
 start: Date, 
 end: Date,
-pirority:Number,
+priority:Number,
 estTime: Number,
 participatingUsers:[{
     type: String
@@ -34,12 +34,23 @@ db.once('open', function() {
 //create task and add to db
 router.post('/task', function(req, res, next) {
     var reqTask= req.body;
-    var newTask = new task({title: reqTask.title, start:reqTask.start, end: reqTask.end, priority:1, estTime:1, participatingUsers:[]});
-    newTask.save(function(err, post) { //[4]
+    var newTask = new task({title: reqTask.title, start:reqTask.start, end: reqTask.end, priority:res.priority, estTime:req.estTime, participatingUsers:[]});
+    newTask.save(function(err, post) { 
         if (err) return console.error(err);
         console.log(post);
          res.sendStatus(200);
     });
+});
+
+// GET tasks from mongo
+router.get('/task', function(req, res, next) {
+    console.log("In the GET route?");
+    task.find(function(err,taskList) { 
+        if (err) return console.error(err); 
+        else {
+            res.json(taskList);
+        }
+})
 });
 
 module.exports = router;
