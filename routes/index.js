@@ -34,8 +34,10 @@ db.once('open', function() {
 //create task and add to db
 router.post('/task', function(req, res, next) {
     var reqTask= req.body;
-    var newTask = new task({title: reqTask.title, start:reqTask.start, end: reqTask.end, priority:res.priority, estTime:req.estTime, participatingUsers:[]});
-    newTask.save(function(err, post) { 
+    console.log("req body for post =");
+    console.log(req.body);
+    var newTask = new task({title: reqTask.title, start:reqTask.start, end: reqTask.end, priority:reqTask.priority, estTime:reqTask.estTime, participatingUsers:[]});
+    newTask.save(function(err, post) {
         if (err) return console.error(err);
         console.log(post);
          res.sendStatus(200);
@@ -44,7 +46,6 @@ router.post('/task', function(req, res, next) {
 
 // GET tasks from mongo
 router.get('/task', function(req, res, next) {
-    console.log("In the GET route?");
     task.find(function(err,taskList) { 
         if (err) return console.error(err); 
         else {

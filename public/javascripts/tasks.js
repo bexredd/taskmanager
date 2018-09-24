@@ -14,11 +14,10 @@ $(document).ready(function(){
       }
       else{
           var task = {title:$("#taskTitle").val(),start:$("#start").val(), end:$("#end").val(), reoccuring:$("#reoccuring").val(), 
-                    numOfReoccurances:$("#numOfReoccurances").val(), priority:$("priority").val(), estTime:$("estTime").val()};
+                    numOfReoccurances:$("#numOfReoccurances").val(), priority:$("[name=priority]").val(), estTime:$("[name=estTime]").val()};
           var jobj = JSON.stringify(task);
           $("#json").text(jobj);
-          console.log(jobj);
-          
+
           var url = "task";
             $.ajax({
               url:url,
@@ -29,12 +28,12 @@ $(document).ready(function(){
                   getTasks();
               }
             })
+          return false;
       }
     });
 });
 
 function getTasks(){
-    console.log("in get tasks");
     $.getJSON('task', function(data) {
       Tasks = data;
       createListHTML(data);
@@ -42,12 +41,10 @@ function getTasks(){
 }
 
 function validateForm() {
-    console.log("in validate form");
   var isValid = true;
   $("form#newTaskForm :input").each(function() {
     if ( $(this).val() === '')
         isValid = false;
-        console.log("returning false for :"+ $(this).val);
   });
   return isValid;
 }
@@ -71,12 +68,13 @@ function sortOnPriority(){
     console.log("sort on priority");
     Tasks.sort(function(a,b){
         let aTimeRem = ((new Date(a.end))- (new Date()));
-        console.log(a);
-        console.log("a time rem. = "+ aTimeRem);
+
         let aScore = aTimeRem *a.priority;
-        console.log("a score = " + aScore);
         let bTimeRem = ((new Date(b.end))- (new Date()));
         let bScore = bTimeRem *b.priority;
+        
+        console.log("a time = " + aTimeRem +" a priority= "+a.priority);
+        console.log("b time = " + bTimeRem +" b priority= "+b.priority);
         console.log(aScore -bScore);
         return aScore-bScore;
     });
