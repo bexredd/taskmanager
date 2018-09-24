@@ -31,12 +31,10 @@ db.once('open', function() {
 });
 
 
-//post task to db
+//create task and add to db
 router.post('/task', function(req, res, next) {
-    console.log("in post function");
     var reqTask= req.body;
     var newTask = new task({title: reqTask.title, start:reqTask.start, end: reqTask.end, priority:1, estTime:1, participatingUsers:[]});
-    console.log(newTask);
     newTask.save(function(err, post) { //[4]
         if (err) return console.error(err);
         console.log(post);

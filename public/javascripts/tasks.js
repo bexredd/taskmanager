@@ -12,6 +12,7 @@ $(document).ready(function(){
       if(!validateForm())
       {
           alert("Please Complete All Fields");
+          return false;
       }
       else{
           var task = {title:$("#taskTitle").val(),start:$("#start").val(), end:$("#end").val(), reoccuring:$("#reoccuring").val(), 
@@ -40,9 +41,9 @@ function validateForm() {
   $("form#newTaskForm :input").each(function() {
     if ( $(this).val() === '')
         isValid = false;
-        console.log("returning false for :"+ $(this));
+        console.log("returning false for :"+ $(this).val);
   });
-  return false;
+  return isValid;
 }
 
 function createListHTML(list){
