@@ -10,7 +10,10 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="stylesheets/style.css">
+
   
+
 </head>
 <body>
 
@@ -39,55 +42,60 @@
 <div class="container-fluid text-center">    
   <div class="row content">
     <div class="col-sm-2 sidenav">
-      <!--links could go here-->
+      <!-- sort options could go here -->
     </div>
     <div class="col-sm-8 text-left"> 
-      <form>
+      <form id="newTaskForm">
 
+        <div >
         <label>Task Titile:</label>
         <input type="text" id="taskTitle" hint="task">
-
+        </div>
     
-      <div>
+      <div >
         <label>Select Start Date</label>
         <input type="datetime-local" id="start"
              value="2018-09-21"/>
-      </div> 
-  
-      <div>
+
         <label>Select End Date</label>
         <input type="datetime-local" id="end"
              value="2018-09-21"/>
       </div>
 
-    <div>
-      <label>Priority</label>
-      <input type="radio" name="priority" value="3">High</input>
-      <input type="radio" name="priority" value="2">Average</input>
-      <input type="radio" name="priority" value="1">Low</input>
-    </div>
-    
-    <div>
+    <div >
       <label>Estimated Amount of Work: (in hours)</label>
       <input type="number" name="estTime"/>
     </div>
-  
+
     <div>
-      <label>Reoccuring:</label>
-      <select id="reoccuring">
-        <option value="never">Never</option>
-        <option value="daily">Daily</option>
-        <option value="Weekly">Weekly</option>
-        <option value="Monthly">Monthly</option>
-      </select>
+      <label>Priority</label>
+        <div>
+          <input type="radio" name="priority" value="3">High</input>
+          <input type="radio" name="priority" value="2">Average</input>
+          <input type="radio" name="priority" value="1">Low</input>
+        </div>
     </div>
+    
+    
+    <div >
+      <label>Reoccuring:</label>
+      <select id="reoccuring" onchange="displayReoccuringMenu()">
+        <option value="never">Never</option>
+        <option value="day">Daily</option>
+        <option value="week">Weekly</option>
+        <option value="month">Monthly</option>
+      </select>
+      <div id="reoccuringMenu">
+      </div>
+    </div>
+    
+    <button id ="createTask" value="createTaskButton">Create Task </button>
   </form>
-      <button id = "createTask">Create Task </button>
 
       <hr>
-      <ol id="taskList">
-        <li>Task one?</li>
-      </ol>
+      <div id="taskList">
+        
+      </div>
     </div>
     <div class="col-sm-2 sidenav">
       <!--links could go here-->
@@ -96,7 +104,7 @@
 </div>
 
 <footer class="container-fluid text-center">
-  <p>Footer Text</p>
+  <div id="calendar">if time add jquery full calendar here</div>
 </footer>
 </body>
 
