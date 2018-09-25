@@ -53,6 +53,20 @@ router.get('/task', function(req, res, next) {
 })
 });
 
-//
+//PUT edit tasks in mongo
+router.put('/task', function(req,res,next){
+    console.log("in put method!");
+    console.log(req.body._id);
+   task.findById(req.body._id, function(err, task){
+       if (err) return console.error(err);
+       else{
+            task.status = req.body.status;
+            task.save(function(err){
+                if (err) return  console.error(err);
+                res.sendStatus(200);
+            })
+       }
+   });
+});
 
 module.exports = router;
