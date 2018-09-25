@@ -69,12 +69,12 @@ function createListHTML(list){
 
 function sortOnPriority(){
     Tasks.sort(function(a,b){
-        let aTimeRem = ((new Date(a.end))- (new Date()));
+        //let aTimeRem = ((new Date(a.end))- (new Date()));
 
-        let aScore = aTimeRem *a.priority;
-        let bTimeRem = ((new Date(b.end))- (new Date()));
-        let bScore = bTimeRem *b.priority;
-        return aScore-bScore;
+        let aScore = a.estTime *a.priority;
+        //let bTimeRem = ((new Date(b.end))- (new Date()));
+        let bScore = b.estTime *b.priority;
+        return bScore-aScore;
     });
     createListHTML(Tasks);
 }
