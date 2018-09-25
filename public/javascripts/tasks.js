@@ -13,15 +13,68 @@ $(document).ready(function(){
           return false;
       }
       else{
-          var task = {title:$("#taskTitle").val(),start:$("#start").val(), end:$("#end").val(), reoccuring:$("#reoccuring").val(), 
-                    numOfReoccurances:$("#numOfReoccurances").val(), priority:$("[name=priority]").val(), estTime:$("[name=estTime]").val()};
-          var jobj = JSON.stringify(task);
-          $("#json").text(jobj);
 
-          var url = "task";
-            $.ajax({
+          var task = {title:$("#taskTitle").val(),start:$("#start").val(), end:$("#end").val(), reoccuring:$("#reoccuring").val(), 
+                    numOfReoccurances:$("[name=numOfReoccurances]").val(), priority:$("[name=priority]").val(), estTime:$("[name=estTime]").val()};
+          if($("#reoccuring").val() != 'never')
+          {createReoccuringTask(task);}
+          else
+          {createTask(task);}
+          
+          return false;
+      }
+    });
+});
+
+function createTask(task){
+  var jobj = JSON.stringify(task);
+  $("#json").text(jobj);
+
+  var url = "task";
+    $.ajax({
+      url:url,
+      type: "POST",
+      data: jobj,
+      contentType: "application/json; charset=utf-8",
+      success: function(data,textStatus) {
+          getTasks();
+      }
+    })
+}
+
+function createReoccuringTask(task){
+    createTask(task)
+    if(task.reoccuring =="day")
+    { 
+        console.log(task.numOfReoccurances);
+        for(var i=0; i< task.numOfReoccurances; i++)
+        {
+            //TODO: adding Day is not working.
+            task.start = (new Date(task.start));
+            task.start = (task.start.add(1).day());
+            console.log(task.start);
+        }
+    }
+}
+
+function getTasks(){
+    $.getJSON('task', function(data) {
+      Tasks = data;
+      createListHTML(data);
+    })
+}
+
+function updateStatus(i){
+        var status = prompt("Please Enter your new status");
+           var task = Tasks[i];
+           task.status = status;
+           var jobj = JSON.stringify(task);
+           $("#json").text(jobj);
+
+           var url = "task";
+             $.ajax({
               url:url,
-              type: "POST",
+              type: "PUT",
               data: jobj,
               contentType: "application/json; charset=utf-8",
               success: function(data,textStatus) {
@@ -29,15 +82,6 @@ $(document).ready(function(){
               }
             })
           return false;
-      }
-    });
-});
-
-function getTasks(){
-    $.getJSON('task', function(data) {
-      Tasks = data;
-      createListHTML(data);
-    })
 }
 
 function validateForm() {
@@ -87,25 +131,4 @@ function displayReoccuringMenu(){
         var menuHtml= '<label>For how many '+ timeMeasurment+ 's: </label> <input type="number" name="numOfReoccurances"/>'
     }
      $("#reoccuringMenu").html(menuHtml);
-}
-
-function updateStatus(i)
-{
-        var status = prompt("Please Enter your new status");
-           var task = Tasks[i];
-           task.status = status;
-           var jobj = JSON.stringify(task);
-           $("#json").text(jobj);
-
-           var url = "task";
-             $.ajax({
-              url:url,
-              type: "PUT",
-              data: jobj,
-              contentType: "application/json; charset=utf-8",
-              success: function(data,textStatus) {
-                  getTasks();
-              }
-            })
-          return false;
 }
