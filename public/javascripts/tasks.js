@@ -50,7 +50,7 @@ function validateForm() {
 }
 
 function createListHTML(list){
-    var taskListHTML = "<ol>";
+    var taskListHTML ="";
        for( var i in list)
        {
          let t = list[i];
@@ -58,24 +58,22 @@ function createListHTML(list){
          let e = new Date(t.end);
          //get hours left up to one decimal
          var timeRemaining = Math.round(((e-currentTime) / (1000*60*60))*10)/10;
-         taskListHTML += "<li> "+t.title+" <br> Due in: "+ timeRemaining+" hrs </li> <br>";                
+         taskListHTML += "<h4> "+t.title+"</h4> <p>Due in: "+ timeRemaining+" hrs</p>";
+         taskListHTML += "<p>Estimated amount of work: "+ t.estTime+" hours</p>";
+         taskListHTML += "<p>Status: "+ t.status;
+         taskListHTML += ' <button class="statusButton" onclick="updateStatus('+i+')">Update</button></p>';
+         
        }
-       taskListHTML+="</ol>"
         $("#taskList").html(taskListHTML);
 }
 
 function sortOnPriority(){
-    console.log("sort on priority");
     Tasks.sort(function(a,b){
         let aTimeRem = ((new Date(a.end))- (new Date()));
 
         let aScore = aTimeRem *a.priority;
         let bTimeRem = ((new Date(b.end))- (new Date()));
         let bScore = bTimeRem *b.priority;
-        
-        console.log("a time = " + aTimeRem +" a priority= "+a.priority);
-        console.log("b time = " + bTimeRem +" b priority= "+b.priority);
-        console.log(aScore -bScore);
         return aScore-bScore;
     });
     createListHTML(Tasks);
@@ -89,4 +87,25 @@ function displayReoccuringMenu(){
         var menuHtml= '<label>For how many '+ timeMeasurment+ 's: </label> <input type="number" name="numOfReoccurances"/>'
     }
      $("#reoccuringMenu").html(menuHtml);
+}
+
+function updateStatus(i)
+{
+        var status = prompt("Please Enter your new status");
+           var task = Tasks[i];
+           task.status = status;
+           var jobj = JSON.stringify(task);
+           $("#json").text(jobj);
+
+           var url = "task";
+             $.ajax({
+              url:url,
+              type: "PUT",
+              data: jobj,
+              contentType: "application/json; charset=utf-8",
+              success: function(data,textStatus) {
+                  getTasks();
+              }
+            })
+          return false;
 }

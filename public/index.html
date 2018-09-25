@@ -11,10 +11,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="stylesheets/style.css">
-
-  
-
 </head>
+
 <body>
 
 <nav class="navbar navbar-inverse">
@@ -30,7 +28,6 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Add New Task</a></li>
-        <li><a href="#">View Current Tasks</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -41,10 +38,11 @@
   
 <div class="container-fluid text-center">    
   <div class="row content">
-    <div class="col-sm-2 sidenav">
+    <div class="col-sm-3 sidenav">
       <div class="sidebar">
-        <!-- sort options could go here -->
-        <h4>Pending Tasks: </h2>
+        <div class="titles">
+          <h3>Pending Tasks: </h3>
+        </div>
         
         <div id="taskList">
         </div>
@@ -54,7 +52,9 @@
     </div>
     <div class="col-sm-8 text-left"> 
       <form id="newTaskForm">
-
+        <div class="titles"> 
+          <h3>Add New Task</h3>
+        </div>
         <div >
         <label>Task Titile:</label>
         <input type="text" id="taskTitle" hint="task">
@@ -78,9 +78,9 @@
     <div>
       <label>Priority</label>
         <div>
-          <input type="radio" name="priority" value="3">High</input>
+          <input type="radio" name="priority" value="1">High</input>
           <input type="radio" name="priority" value="2">Average</input>
-          <input type="radio" name="priority" value="1">Low</input>
+          <input type="radio" name="priority" value="3">Low</input>
         </div>
     </div>
     
@@ -102,7 +102,7 @@
 
       <hr>
     </div>
-    <div class="col-sm-2 sidenav">
+    <div class="col-sm-1 sidenav">
       <!--links could go here-->
     </div>
   </div>

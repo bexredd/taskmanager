@@ -19,7 +19,8 @@ priority:Number,
 estTime: Number,
 participatingUsers:[{
     type: String
-}]
+}],
+status: String
 });
 
 
@@ -34,9 +35,7 @@ db.once('open', function() {
 //create task and add to db
 router.post('/task', function(req, res, next) {
     var reqTask= req.body;
-    console.log("req body for post =");
-    console.log(req.body);
-    var newTask = new task({title: reqTask.title, start:reqTask.start, end: reqTask.end, priority:reqTask.priority, estTime:reqTask.estTime, participatingUsers:[]});
+    var newTask = new task({title: reqTask.title, start:reqTask.start, end: reqTask.end, priority:reqTask.priority, estTime:reqTask.estTime, participatingUsers:[], status:"Task created"});
     newTask.save(function(err, post) {
         if (err) return console.error(err);
         console.log(post);
@@ -53,5 +52,7 @@ router.get('/task', function(req, res, next) {
         }
 })
 });
+
+//
 
 module.exports = router;
